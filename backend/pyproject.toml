@@ -1,0 +1,13 @@
+[project]
+name = "rag-ouro-vturb"
+version = "0.1.0"
+description = "RAG local sobre o compilado 'Ouro VTurb' (Firestore + e5 + Claude)"
+requires-python = ">=3.12,<3.13"
+dependencies = [
+    "anthropic==1.14.0",
+    "google-cloud-firestore>=2.34.1",
+    "sentence-transformers>=3.0",
+    "fastapi>=0.115",
+    "uvicorn>=0.30",
+    "python-dotenv>=1.0",
+]
