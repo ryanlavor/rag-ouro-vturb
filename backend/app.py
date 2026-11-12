@@ -164,6 +164,9 @@ def chat(pedido: Pedido):
 
     def eventos():
         yield f"data: {json.dumps({'tipo': 'fontes', 'fontes': fontes, 'via': via}, ensure_ascii=False)}\n\n"
+        # O fallback do lado do servidor só existe na API da Anthropic; OpenRouter recusa o parâmetro.
+        extra = ({} if os.environ.get("ANTHROPIC_BASE_URL")
+                 else {"betas": ["server-side-fallback-2026-07-01"], "fallbacks": "default"})
         try:
             with claude().beta.messages.stream(
                 model=MODELO_CLAUDE,
@@ -171,8 +174,7 @@ def chat(pedido: Pedido):
                 system=[{"type": "text", "text": SISTEMA, "cache_control": {"type": "ephemeral"}}],
                 thinking={"type": "adaptive"},
                 output_config={"effort": "medium"},
-                betas=["server-side-fallback-2026-07-01"],
-                fallbacks="default",
+                **extra,
                 messages=historico,
             ) as stream:
                 for texto in stream.text_stream:

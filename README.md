@@ -8,6 +8,17 @@ powershell -ExecutionPolicy Bypass -File C:\Users\ryanr\rag-ouro-vturb\iniciar.p
 ```
 Abre http://127.0.0.1:8765. A primeira pergunta demora uns segundos (o modelo de embedding carrega na subida).
 
+## Rodar em outra máquina (colega do time)
+1. Instale [uv](https://docs.astral.sh/uv/), Node.js e o [gcloud CLI](https://cloud.google.com/sdk/docs/install).
+2. `git clone https://github.com/ryanlavor/rag-ouro-vturb.git` e entre na pasta.
+3. **Acesso ao Firestore:** o Ryan precisa dar ao seu e-mail o papel *Cloud Datastore User* no projeto
+   `scraping-renda`. Depois rode `gcloud auth application-default login`.
+4. **Chave do modelo:** copie `backend/.env.exemplo` para `backend/.env` e preencha (Anthropic ou OpenRouter com créditos).
+   O `.env` nunca vai para o GitHub.
+5. Monte o front uma vez: `cd frontend; npm install; npm run build`.
+6. Suba: `powershell -ExecutionPolicy Bypass -File iniciar.ps1`. Na primeira vez, rode sem o `HF_HUB_OFFLINE` do script
+   para baixar o modelo de embedding (~2 GB).
+
 ## Como funciona (RAG)
 1. **Chunking** (`scripts/chunk_e_sobe.py`): `pdftotext -layout`, sem o sumário; o cabeçalho de cada página
    indica o capítulo; as tabelas viram linhas `a | b | c`; a prosa é reflowada. Os chunks têm cerca de 1.400
